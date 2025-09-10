@@ -1,0 +1,13 @@
+# config.yaml
+paths:
+  raw_data: 'dados_brutos'
+  processed_data: 'dados_processados'
+
+api:
+  base_url: "https://dadosabertos.aneel.gov.br/api/3/action/datastore_search"
+  resource_id: "4493985c-baea-429c-9df5-3030422c71d7"
+  timeout_seconds: 60
+
+data_quality:
+  valid_year_range: [2000, 2025] # Ano mínimo e máximo aceitável
+  non_negative_cols: ['DEC', 'FEC', 'DIC', 'FIC'] # Colunas que não podem ser negativas

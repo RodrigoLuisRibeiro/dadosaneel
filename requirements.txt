@@ -1,0 +1,21 @@
+# requirements.txt
+# Arquivo de dependências principal para o projeto de Análise ANEEL
+
+# Core do Dashboard
+streamlit
+pandas
+plotly
+
+# Processamento de Dados
+polars
+pyarrow
+requests
+
+# Análise e Modelagem
+statsmodels
+numpy
+
+# Melhorias Profissionais
+pyyaml      # Para ler o arquivo config.yaml
+pandera     # Para validação da qualidade dos dados
+deltalake   # Para armazenamento em formato Delta Lake
