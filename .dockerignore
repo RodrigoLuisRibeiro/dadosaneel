@@ -1,0 +1,18 @@
+# Arquivo para ignorar arquivos no build do Docker
+
+# Ambiente Virtual e Caches
+.venv
+venv
+__pycache__
+*.pyc
+
+# Pastas de dados, logs e Git
+.git
+dados_brutos
+dados_processados
+logs
+
+# Arquivos de IDE e SO
+.idea
+.vscode
+.DS_Store
