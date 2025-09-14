@@ -1,0 +1,22 @@
+# Arquivo para ignorar arquivos e pastas no Git
+
+# Ambiente Virtual do Python
+venv/
+.venv/
+env/
+.env
+
+# Pastas de dados e logs
+dados_brutos/
+logs/
+
+# Caches do Python
+__pycache__/
+*.pyc
+
+# Arquivos de Sistema Operacional
+.DS_Store
+
+# Arquivos de IDEs (opcional, mas recomendado)
+.idea/
+.vscode/
