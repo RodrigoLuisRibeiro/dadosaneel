@@ -1,5 +1,6 @@
 # processar_dados.py
 import pandas as pd
+import pyarrow as arrow
 import os
 import requests
 import json
@@ -168,8 +169,10 @@ def criar_pipeline_unificado():
     logging.info(f"Salvando os dados processados em '{path_dados_processados}' no formato Delta Lake...")
     write_deltalake(
         path_dados_processados,
-        df_final,
+        arrow.Table.from_pandas(df_final, preserve_index=False),
         mode='overwrite',
+        # Substitui também o esquema antigo, que pode conter o índice do pandas.
+        schema_mode='overwrite',
         partition_by=['Ano', 'Distribuidora']
     )
     logging.info("Pipeline de dados concluído com sucesso!")
