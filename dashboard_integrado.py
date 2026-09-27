@@ -6,7 +6,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from statsmodels.tsa.statespace.sarimax import SARIMAX
-from urllib.parse import unquote
+from dados_dashboard import listar_distribuidoras, ler_distribuidora
 
 # --- Configurações da Página ---
 st.set_page_config(layout="wide", page_title="Análise Avançada de Continuidade - ANEEL")
@@ -15,31 +15,20 @@ st.set_page_config(layout="wide", page_title="Análise Avançada de Continuidade
 # --- Funções de Lógica e Carregamento de Dados ---
 @st.cache_data
 def obter_lista_distribuidoras(path='dados_processados'):
-    """
-    Usa os.walk para varrer a estrutura de diretórios e encontrar as pastas
-    de partição da distribuidora de forma explícita e robusta.
-    """
-    distribuidoras = set()
+    """Lista apenas distribuidoras presentes na versão atual da tabela Delta."""
     try:
         if not os.path.isdir(path):
-            st.error(f"A pasta '{path}' não foi encontrada. Execute o '1_processar_dados.py' primeiro.")
+            st.error(f"A pasta '{path}' não foi encontrada. Execute o 'processar_dados.py' primeiro.")
             return []
 
-        for root, dirs, files in os.walk(path):
-            for dirname in dirs:
-                if dirname.startswith('Distribuidora='):
-                    nome_bruto_codificado = dirname.split('=', 1)[1]
-                    nome_decodificado = unquote(nome_bruto_codificado)
-                    nome_limpo = nome_decodificado.strip()
-                    if nome_limpo:
-                        distribuidoras.add(nome_limpo)
+        distribuidoras = listar_distribuidoras(path)
 
         if not distribuidoras:
             st.warning(
                 "Nenhuma partição de distribuidora foi encontrada na pasta 'dados_processados'. Verifique se o pipeline foi executado corretamente.")
             return []
 
-        return sorted(list(distribuidoras))
+        return distribuidoras
 
     except Exception as e:
         st.error(f"Ocorreu um erro ao ler a estrutura de pastas em '{path}'. Detalhes: {e}")
@@ -53,7 +42,7 @@ def carregar_dados_distribuidora(distribuidora):
     O filtro de partição torna esta operação extremamente rápida.
     """
     try:
-        df = pd.read_parquet('dados_processados', filters=[('Distribuidora', '==', distribuidora)])
+        df = ler_distribuidora(distribuidora)
         df['Data'] = pd.to_datetime(df['Ano'].astype(str) + '-' + df['Mes'].astype(str))
         return df
     except Exception as e:
@@ -140,7 +129,7 @@ if tipo_analise == "Sobre o Projeto":
         st.link_button("Ver o Código no GitHub", "https://github.com/RodrigoLuisRibeiro/dadosaneel")
     with col_li:
         st.link_button("Conectar no LinkedIn",
-                       "https://www.linkedin.com/in/rodrigo-luis-ribeiro-9b5837139/")  # (Sugestão, altere para seu link)
+                       "https://www.linkedin.com/in/rodrigo-luis-ribeiro/")
 
 
 else:

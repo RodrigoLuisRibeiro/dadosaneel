@@ -88,6 +88,7 @@ Este método executa o projeto inteiro dentro de um contêiner isolado. É a for
 ---
 
 ## 📂 Estrutura do Projeto
+-   `dados_dashboard.py`: Leitura da versão atual da tabela Delta, respeitando os arquivos ativos e as variações de espaços nos nomes das distribuidoras.
 -   `processar_dados.py`: O "cérebro" do projeto. Script responsável por toda a extração, tratamento e armazenamento dos dados.
 -   `dashboard_integrado.py`: A "interface" do projeto. Contém todo o código do dashboard interativo.
 -   `config.yaml`: O "painel de controle". Arquivo de configuração para alterar facilmente caminhos e URLs.
@@ -96,3 +97,18 @@ Este método executa o projeto inteiro dentro de um contêiner isolado. É a for
 -   `dados_brutos/`: A "caixa de entrada" para seus arquivos CSV.
 -   `dados_processados/`: O "armazém" onde os dados limpos são salvos.
 -   `logs/`: O "diário de bordo" do pipeline.
+
+## Testes
+
+Com as dependências instaladas, execute na raiz do projeto:
+
+```bash
+python -m unittest discover -v
+```
+
+Os testes usam tabelas temporárias para validar a substituição do esquema Delta,
+a exclusão do índice do pandas e a leitura sem registros de versões antigas.
+
+O dashboard deve ler `dados_processados/` pelo Delta Lake. Ler todos os arquivos
+Parquet diretamente inclui versões antigas preservadas no disco. Ao publicar os
+dados no Git, inclua os arquivos de dados e o diretório `_delta_log` juntos.
